@@ -6,7 +6,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/cybozu-go/aptutil/well"
+	"github.com/thomascriley/aptutil/well"
 )
 
 const (

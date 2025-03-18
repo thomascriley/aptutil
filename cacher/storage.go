@@ -8,8 +8,8 @@ import (
 	"sync"
 
 	"errors"
-	"github.com/cybozu-go/aptutil/apt"
-	"github.com/cybozu-go/aptutil/log"
+	"github.com/thomascriley/aptutil/apt"
+	"github.com/thomascriley/aptutil/log"
 )
 
 const (

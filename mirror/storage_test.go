@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/cybozu-go/aptutil/apt"
+	"github.com/thomascriley/aptutil/apt"
 )
 
 func makeFileInfo(path string, data []byte) (*apt.FileInfo, error) {

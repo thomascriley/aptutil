@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"errors"
-	"github.com/cybozu-go/aptutil/log"
-	"github.com/cybozu-go/aptutil/well"
+	"github.com/thomascriley/aptutil/log"
+	"github.com/thomascriley/aptutil/well"
 )
 
 const (

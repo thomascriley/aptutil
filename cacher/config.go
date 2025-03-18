@@ -1,6 +1,6 @@
 package cacher
 
-import "github.com/cybozu-go/aptutil/well"
+import "github.com/thomascriley/aptutil/well"
 
 const (
 	defaultAddress       = ":3142"

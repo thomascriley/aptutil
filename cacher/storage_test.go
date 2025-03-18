@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/cybozu-go/aptutil/apt"
+	"github.com/thomascriley/aptutil/apt"
 )
 
 func insert(cm *Storage, data []byte, path string) (*apt.FileInfo, error) {
