@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/pkg/errors"
+	"errors"
 	"github.com/ulikunitz/xz"
 )
 
@@ -92,7 +92,7 @@ func getFilesFromRelease(p string, r io.Reader) ([]*FileInfo, Paragraph, error) 
 
 	d, err := NewParser(r).Read()
 	if err != nil {
-		return nil, nil, errors.Wrap(err, "NewParser(r).Read()")
+		return nil, nil, fmt.Errorf("NewParser(r).Read(): %w", err)
 	}
 
 	md5sums := d["MD5Sum"]
@@ -109,7 +109,7 @@ func getFilesFromRelease(p string, r io.Reader) ([]*FileInfo, Paragraph, error) 
 		p, size, csum, err := parseChecksum(l)
 		p = path.Join(dir, path.Clean(p))
 		if err != nil {
-			return nil, nil, errors.Wrap(err, "parseChecksum for md5sums")
+			return nil, nil, fmt.Errorf("parseChecksum for md5sums: %w", err)
 		}
 
 		fi := &FileInfo{
@@ -124,7 +124,7 @@ func getFilesFromRelease(p string, r io.Reader) ([]*FileInfo, Paragraph, error) 
 		p, size, csum, err := parseChecksum(l)
 		p = path.Join(dir, path.Clean(p))
 		if err != nil {
-			return nil, nil, errors.Wrap(err, "parseChecksum for sha1sums")
+			return nil, nil, fmt.Errorf("parseChecksum for sha1sums: %w", err)
 		}
 
 		fi, ok := m[p]
@@ -144,7 +144,7 @@ func getFilesFromRelease(p string, r io.Reader) ([]*FileInfo, Paragraph, error) 
 		p, size, csum, err := parseChecksum(l)
 		p = path.Join(dir, path.Clean(p))
 		if err != nil {
-			return nil, nil, errors.Wrap(err, "parseChecksum for sha256sums")
+			return nil, nil, fmt.Errorf("parseChecksum for sha256sums: %w", err)
 		}
 
 		fi, ok := m[p]
@@ -185,7 +185,7 @@ func getFilesFromPackages(p string, r io.Reader) ([]*FileInfo, Paragraph, error)
 			break
 		}
 		if err != nil {
-			return nil, nil, errors.Wrap(err, "parser.Read")
+			return nil, nil, fmt.Errorf("parser.Read: %w", err)
 		}
 
 		filename, ok := d["Filename"]
@@ -246,7 +246,7 @@ func getFilesFromSources(p string, r io.Reader) ([]*FileInfo, Paragraph, error) 
 			break
 		}
 		if err != nil {
-			return nil, nil, errors.Wrap(err, "parser.Read")
+			return nil, nil, fmt.Errorf("parser.Read: %w", err)
 		}
 
 		dir, ok := d["Directory"]
@@ -259,7 +259,7 @@ func getFilesFromSources(p string, r io.Reader) ([]*FileInfo, Paragraph, error) 
 		for _, l := range d["Files"] {
 			fname, size, csum, err := parseChecksum(l)
 			if err != nil {
-				return nil, nil, errors.Wrap(err, "parseChecksum for Files")
+				return nil, nil, fmt.Errorf("parseChecksum for Files: %w", err)
 			}
 
 			fpath := path.Clean(path.Join(dir[0], fname))
@@ -273,7 +273,7 @@ func getFilesFromSources(p string, r io.Reader) ([]*FileInfo, Paragraph, error) 
 		for _, l := range d["Checksums-Sha1"] {
 			fname, size, csum, err := parseChecksum(l)
 			if err != nil {
-				return nil, nil, errors.Wrap(err, "parseChecksum for Checksums-Sha1")
+				return nil, nil, fmt.Errorf("parseChecksum for Checksums-Sha1: %w", err)
 			}
 
 			fpath := path.Clean(path.Join(dir[0], fname))
@@ -291,7 +291,7 @@ func getFilesFromSources(p string, r io.Reader) ([]*FileInfo, Paragraph, error) 
 		for _, l := range d["Checksums-Sha256"] {
 			fname, size, csum, err := parseChecksum(l)
 			if err != nil {
-				return nil, nil, errors.Wrap(err, "parseChecksum for Checksums-Sha256")
+				return nil, nil, fmt.Errorf("parseChecksum for Checksums-Sha256: %w", err)
 			}
 
 			fpath := path.Clean(path.Join(dir[0], fname))

@@ -6,7 +6,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/cybozu-go/well"
+	"github.com/cybozu-go/aptutil/well"
 )
 
 const (
@@ -157,11 +157,11 @@ func (mc *MirrConfig) MatchingIndex(p string) bool {
 //
 // Use https://github.com/BurntSushi/toml as follows:
 //
-//    config := mirror.NewConfig()
-//    md, err := toml.DecodeFile("/path/to/config.toml", config)
-//    if err != nil {
-//        ...
-//    }
+//	config := mirror.NewConfig()
+//	md, err := toml.DecodeFile("/path/to/config.toml", config)
+//	if err != nil {
+//	    ...
+//	}
 type Config struct {
 	Dir      string                 `toml:"dir"`
 	MaxConns int                    `toml:"max_conns"`

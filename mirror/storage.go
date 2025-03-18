@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"sync"
 
+	"errors"
 	"github.com/cybozu-go/aptutil/apt"
-	"github.com/pkg/errors"
 )
 
 const (
@@ -72,7 +72,7 @@ func (s *Storage) Load() error {
 	jd := json.NewDecoder(f)
 	err = jd.Decode(&s.info)
 	if err != nil {
-		return errors.Wrap(err, "Storage.Load: "+infoPath)
+		return fmt.Errorf("Storage.Load: "+infoPath+": %w", err)
 	}
 	return nil
 }
@@ -106,7 +106,7 @@ func (s *Storage) Save() error {
 	f.Sync()
 	err = DirSyncTree(s.dir)
 	if err != nil {
-		return errors.Wrap(err, "DirSyncTree(s.dir)")
+		return fmt.Errorf("DirSyncTree(s.dir): %w", err)
 	}
 
 	return nil
@@ -175,11 +175,11 @@ func (s *Storage) StoreLinkWithHash(fi *apt.FileInfo, fullpath string) error {
 		d := filepath.Dir(fp)
 		err := os.MkdirAll(d, 0755)
 		if err != nil {
-			return errors.Wrap(err, "StoreLinkWithHash: "+fp)
+			return fmt.Errorf("StoreLinkWithHash: "+fp+": %w", err)
 		}
 		err = os.Link(fullpath, fp)
 		if err != nil && !os.IsExist(err) {
-			return errors.Wrap(err, "StoreLinkWithHash: "+fp)
+			return fmt.Errorf("StoreLinkWithHash: "+fp+": %w", err)
 		}
 	}
 	return nil

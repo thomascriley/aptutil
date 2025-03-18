@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/cybozu-go/log"
-	"github.com/cybozu-go/well"
-	"github.com/pkg/errors"
+	"errors"
+	"github.com/cybozu-go/aptutil/log"
+	"github.com/cybozu-go/aptutil/well"
 )
 
 const (
@@ -70,7 +70,7 @@ func gc(ctx context.Context, c *Config) error {
 		}
 		p, err := filepath.EvalSymlinks(filepath.Join(c.Dir, dentry.Name()))
 		if err != nil {
-			return errors.Wrap(err, "gc")
+			return fmt.Errorf("gc: %w", err)
 		}
 		using[dentry.Name()] = true
 		using[filepath.Base(filepath.Dir(p))] = true
@@ -94,7 +94,7 @@ func gc(ctx context.Context, c *Config) error {
 		})
 		err := os.RemoveAll(p)
 		if err != nil {
-			return errors.Wrap(err, "gc")
+			return fmt.Errorf("gc: %w", err)
 		}
 	}
 

@@ -12,10 +12,10 @@ import (
 	"regexp"
 	"time"
 
+	"errors"
 	"github.com/cybozu-go/aptutil/apt"
-	"github.com/cybozu-go/log"
-	"github.com/cybozu-go/well"
-	"github.com/pkg/errors"
+	"github.com/cybozu-go/aptutil/log"
+	"github.com/cybozu-go/aptutil/well"
 )
 
 const (
@@ -472,11 +472,11 @@ func (m *Mirror) handleReleaseResults(results <-chan *dlResult, byhash *bool) ([
 	// 200 OK
 	err := m.storage.StoreLink(r.fi, r.tempfile.Name())
 	if err != nil {
-		return nil, errors.Wrap(err, "storage.Store")
+		return nil, fmt.Errorf("storage.Store: %w", err)
 	}
 	fil, d, err := apt.ExtractFileInfo(r.path, r.tempfile)
 	if err != nil {
-		return nil, errors.Wrap(err, "ExtractFileInfo: "+r.path)
+		return nil, fmt.Errorf("ExtractFileInfo: "+r.path+": %w", err)
 	}
 
 	if *byhash && path.Base(r.path) != "Release.gpg" {
@@ -612,7 +612,7 @@ func (m *Mirror) reuseOrDownload(ctx context.Context, fil []*apt.FileInfo,
 			if localfi != nil {
 				err := m.storeLink(localfi, fullpath, byhash)
 				if err != nil {
-					return nil, errors.Wrap(err, "storeLink")
+					return nil, fmt.Errorf("storeLink: %w", err)
 				}
 				reused = append(reused, localfi)
 				if log.Enabled(log.LvDebug) {
@@ -663,7 +663,7 @@ func (m *Mirror) handleResult(r *dlResult, allowMissing, byhash bool) (*apt.File
 
 	err := m.storeLink(r.fi, r.tempfile.Name(), byhash)
 	if err != nil {
-		return nil, errors.Wrap(err, "store")
+		return nil, fmt.Errorf("store: %w", err)
 	}
 
 	return r.fi, nil

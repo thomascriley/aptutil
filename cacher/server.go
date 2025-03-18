@@ -3,7 +3,7 @@ package cacher
 import (
 	"net/http"
 
-	"github.com/cybozu-go/well"
+	"github.com/cybozu-go/aptutil/well"
 )
 
 // NewServer returns HTTPServer implements go-apt-cacher handlers.

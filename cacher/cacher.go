@@ -5,8 +5,8 @@ package cacher
 
 import (
 	"context"
+	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -16,10 +16,10 @@ import (
 	"sync"
 	"time"
 
+	"errors"
 	"github.com/cybozu-go/aptutil/apt"
-	"github.com/cybozu-go/log"
-	"github.com/cybozu-go/well"
-	"github.com/pkg/errors"
+	"github.com/cybozu-go/aptutil/log"
+	"github.com/cybozu-go/aptutil/well"
 )
 
 const (
@@ -88,10 +88,10 @@ func NewCacher(config *Config) (*Cacher, error) {
 	cache := NewStorage(cacheDir, capacity)
 
 	if err := meta.Load(); err != nil {
-		return nil, errors.Wrap(err, "meta.Load")
+		return nil, fmt.Errorf("meta.Load: %w", err)
 	}
 	if err := cache.Load(); err != nil {
-		return nil, errors.Wrap(err, "cache.Load")
+		return nil, fmt.Errorf("cache.Load: %w", err)
 	}
 
 	um := make(URLMap)
@@ -127,7 +127,7 @@ func NewCacher(config *Config) (*Cacher, error) {
 	for _, fi := range metas {
 		f, err := meta.Lookup(fi)
 		if err != nil {
-			return nil, errors.Wrap(err, "meta.Lookup")
+			return nil, fmt.Errorf("meta.Lookup: %w", err)
 		}
 		t := strings.SplitN(fi.Path(), "/", 2)
 		if len(t) != 2 {
@@ -136,7 +136,7 @@ func NewCacher(config *Config) (*Cacher, error) {
 		fil, _, err := apt.ExtractFileInfo(t[1], f)
 		f.Close()
 		if err != nil {
-			return nil, errors.Wrap(err, "ExtractFileInfo("+fi.Path()+")")
+			return nil, fmt.Errorf("ExtractFileInfo("+fi.Path()+"): %w", err)
 		}
 		fil = addPrefix(t[0], fil)
 		for _, fi2 := range fil {
@@ -200,6 +200,10 @@ func (c *Cacher) maintMeta(p string) {
 	}
 }
 
+func (c *Cacher) Go(fn func(ctx context.Context) error) {
+
+}
+
 func (c *Cacher) maintRelease(ctx context.Context, p string, withGPG bool) {
 	ticker := time.NewTicker(c.checkInterval)
 	defer ticker.Stop()
@@ -226,7 +230,7 @@ func (c *Cacher) maintRelease(ctx context.Context, p string, withGPG bool) {
 }
 
 func closeRespBody(r *http.Response) {
-	io.Copy(ioutil.Discard, r.Body)
+	io.Copy(io.Discard, r.Body)
 	r.Body.Close()
 }
 

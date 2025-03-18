@@ -7,10 +7,9 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
+	"fmt"
 	"io"
 	"path"
-
-	"github.com/pkg/errors"
 )
 
 // FileInfo is a set of meta data of a file.
@@ -149,15 +148,15 @@ func (fi *FileInfo) UnmarshalJSON(data []byte) error {
 	fi.size = uint64(fij.Size)
 	md5sum, err := hex.DecodeString(fij.MD5Sum)
 	if err != nil {
-		return errors.Wrap(err, "UnmarshalJSON for "+fij.Path)
+		return fmt.Errorf("UnmarshalJSON for "+fij.Path+": %w", err)
 	}
 	sha1sum, err := hex.DecodeString(fij.SHA1Sum)
 	if err != nil {
-		return errors.Wrap(err, "UnmarshalJSON for "+fij.Path)
+		return fmt.Errorf("UnmarshalJSON for "+fij.Path+": %w", err)
 	}
 	sha256sum, err := hex.DecodeString(fij.SHA256Sum)
 	if err != nil {
-		return errors.Wrap(err, "UnmarshalJSON for "+fij.Path)
+		return fmt.Errorf("UnmarshalJSON for "+fij.Path+": %w", err)
 	}
 	fi.md5sum = md5sum
 	fi.sha1sum = sha1sum

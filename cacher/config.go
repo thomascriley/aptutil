@@ -1,6 +1,6 @@
 package cacher
 
-import "github.com/cybozu-go/well"
+import "github.com/cybozu-go/aptutil/well"
 
 const (
 	defaultAddress       = ":3142"
@@ -14,11 +14,11 @@ const (
 //
 // Use https://github.com/BurntSushi/toml as follows:
 //
-//    config := cacher.NewConfig()
-//    md, err := toml.DecodeFile("/path/to/config.toml", config)
-//    if err != nil {
-//        ...
-//    }
+//	config := cacher.NewConfig()
+//	md, err := toml.DecodeFile("/path/to/config.toml", config)
+//	if err != nil {
+//	    ...
+//	}
 type Config struct {
 	// Addr is the listening address of HTTP server.
 	//

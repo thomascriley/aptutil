@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"sync"
 
+	"errors"
 	"github.com/cybozu-go/aptutil/apt"
-	"github.com/cybozu-go/log"
-	"github.com/pkg/errors"
+	"github.com/cybozu-go/aptutil/log"
 )
 
 const (

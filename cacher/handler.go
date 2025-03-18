@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/cybozu-go/log"
+	"github.com/cybozu-go/aptutil/log"
 )
 
 type cacheHandler struct {
